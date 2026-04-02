@@ -1,0 +1,43 @@
+class TrieNode {
+    HashMap<Character, TrieNode> children = new HashMap<>();
+    boolean endOfWord = false;
+}
+
+class PrefixTree {
+    private TrieNode root;
+
+    public PrefixTree() {
+        root = new TrieNode();
+    }
+
+    public void insert(String word) {
+        TrieNode cur = root;
+        for (char c: word.toCharArray()) {
+            cur.children.putIfAbsent(c, new TrieNode()); //we add a new node if the character has not been encountered in this sequence
+            cur = cur.children.get(c); //move on to the next node
+        }
+        cur.endOfWord = true; //the last node (cur after the loop) is the end of the word
+    }
+
+    public boolean search(String word) {
+        TrieNode cur = root;
+        for (char c : word.toCharArray()){
+            if (!cur.children.containsKey(c)){
+                return false;
+            }
+            cur = cur.children.get(c);
+        }
+        return cur.endOfWord;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode cur = root;
+        for (char c: prefix.toCharArray()) {
+            if (!cur.children.containsKey(c)){
+                return false;
+            }
+            cur = cur.children.get(c);
+        }
+        return true;
+    }
+}
